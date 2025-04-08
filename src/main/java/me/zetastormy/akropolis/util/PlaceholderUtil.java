@@ -47,14 +47,6 @@ public class PlaceholderUtil {
                 text = TextUtil.parseAndReplace(TextUtil.raw(text), "player", player.name());
             }
 
-            if (rawText.contains("<online>")) {
-                text = TextUtil.parseAndReplace(TextUtil.raw(text), "online", Component.text(Bukkit.getOnlinePlayers().size()));
-            }
-
-            if (rawText.contains("<online_max>")) {
-                text = TextUtil.parseAndReplace(TextUtil.raw(text), "online_max", Component.text(Bukkit.getMaxPlayers()));
-            }
-
             if (rawText.contains("<location>")) {
                 Location l = player.getLocation();
                 text = TextUtil.parseAndReplace(TextUtil.raw(text), "location", Component.text(l.getBlockX() + ", " + l.getBlockY() + ", " + l.getBlockZ()));
@@ -71,6 +63,14 @@ public class PlaceholderUtil {
             if (papi) {
                 text = TextUtil.parse(TextUtil.raw(text), papiTag(player));
             }
+        }
+
+        if (rawText.contains("<online>")) {
+            text = TextUtil.parseAndReplace(TextUtil.raw(text), "online", Component.text(Bukkit.getOnlinePlayers().size()));
+        }
+
+        if (rawText.contains("<online_max>")) {
+            text = TextUtil.parseAndReplace(TextUtil.raw(text), "online_max", Component.text(Bukkit.getMaxPlayers()));
         }
 
         if (miniplaceholders && audience != null) {
