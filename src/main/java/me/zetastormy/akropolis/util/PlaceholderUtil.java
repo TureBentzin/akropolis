@@ -21,6 +21,7 @@ package me.zetastormy.akropolis.util;
 
 import io.github.miniplaceholders.api.MiniPlaceholders;
 import me.clip.placeholderapi.PlaceholderAPI;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -38,40 +39,42 @@ public class PlaceholderUtil {
         throw new UnsupportedOperationException();
     }
 
-    public static Component setPlaceholders(String rawText, Player player) {
+    public static Component setPlaceholders(String rawText, Audience audience) {
         Component text = TextUtil.parse(rawText);
 
-        if (rawText.contains("<player>") && player != null) {
-            text = TextUtil.parseAndReplace(TextUtil.raw(text), "player", player.name());
+        if ((audience instanceof Player player)) {
+            if (rawText.contains("<player>")) {
+                text = TextUtil.parseAndReplace(TextUtil.raw(text), "player", player.name());
+            }
+
+            if (rawText.contains("<online>")) {
+                text = TextUtil.parseAndReplace(TextUtil.raw(text), "online", Component.text(Bukkit.getOnlinePlayers().size()));
+            }
+
+            if (rawText.contains("<online_max>")) {
+                text = TextUtil.parseAndReplace(TextUtil.raw(text), "online_max", Component.text(Bukkit.getMaxPlayers()));
+            }
+
+            if (rawText.contains("<location>")) {
+                Location l = player.getLocation();
+                text = TextUtil.parseAndReplace(TextUtil.raw(text), "location", Component.text(l.getBlockX() + ", " + l.getBlockY() + ", " + l.getBlockZ()));
+            }
+
+            if (rawText.contains("<ping>")) {
+                text = TextUtil.parseAndReplace(TextUtil.raw(text), "ping", Component.text(player.getPing()));
+            }
+
+            if (rawText.contains("<world>")) {
+                text = TextUtil.parseAndReplace(TextUtil.raw(text), "world", Component.text(player.getWorld().getName()));
+            }
+
+            if (papi) {
+                text = TextUtil.parse(TextUtil.raw(text), papiTag(player));
+            }
         }
 
-        if (rawText.contains("<online>")) {
-            text = TextUtil.parseAndReplace(TextUtil.raw(text), "online", Component.text(Bukkit.getOnlinePlayers().size()));
-        }
-
-        if (rawText.contains("<online_max>")) {
-            text = TextUtil.parseAndReplace(TextUtil.raw(text), "online_max", Component.text(Bukkit.getMaxPlayers()));
-        }
-
-        if (rawText.contains("<location>") && player != null) {
-            Location l = player.getLocation();
-            text = TextUtil.parseAndReplace(TextUtil.raw(text), "location", Component.text(l.getBlockX() + ", " + l.getBlockY() + ", " + l.getBlockZ()));
-        }
-
-        if (rawText.contains("<ping>") && player != null) {
-            text = TextUtil.parseAndReplace(TextUtil.raw(text), "ping", Component.text(player.getPing()));
-        }
-
-        if (rawText.contains("<world>") && player != null) {
-            text = TextUtil.parseAndReplace(TextUtil.raw(text), "world", Component.text(player.getWorld().getName()));
-        }
-
-        if (papi && player != null) {
-            text = TextUtil.parse(TextUtil.raw(text), papiTag(player));
-        }
-
-        if (miniplaceholders && player != null) {
-            text = TextUtil.parse(TextUtil.raw(text), MiniPlaceholders.getAudienceGlobalPlaceholders(player));
+        if (miniplaceholders && audience != null) {
+            text = TextUtil.parse(TextUtil.raw(text), MiniPlaceholders.getAudienceGlobalPlaceholders(audience));
         }
 
         return text;
