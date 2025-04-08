@@ -29,21 +29,21 @@ import org.bukkit.Color;
 public class TextUtil {
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
 
-    private static boolean MPSTATE = false;
+    private static boolean miniplaceholders = false;
 
     private TextUtil() {
         throw new UnsupportedOperationException();
     }
 
     public static Component parse(String message) {
-        if (MPSTATE)
+        if (miniplaceholders)
             return MINI_MESSAGE.deserialize(message, MiniPlaceholders.getGlobalPlaceholders());
         else
             return MINI_MESSAGE.deserialize(message);
     }
 
     public static Component parse(String message, TagResolver resolver) {
-        if (MPSTATE)
+        if (miniplaceholders)
             return MINI_MESSAGE.deserialize(message, resolver, MiniPlaceholders.getGlobalPlaceholders());
         else
             return MINI_MESSAGE.deserialize(message, resolver);
@@ -94,7 +94,7 @@ public class TextUtil {
         };
     }
 
-    public static void setMPSTATE(boolean MPSTATE) {
-        TextUtil.MPSTATE = MPSTATE;
+    public static void setMPState(boolean miniplaceholders) {
+        TextUtil.miniplaceholders = miniplaceholders;
     }
 }
