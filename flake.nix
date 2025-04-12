@@ -20,7 +20,7 @@
       {
         packages.default = pkgs.stdenv.mkDerivation {
           pname = "akropolis";
-          version = "1.8.1"; # see gradle.propertiesqq
+          version = "1.8.1"; # see gradle.properties
 
           src = ./.;
 
@@ -29,14 +29,13 @@
             pkgs.jdk
           ];
 
-          buildPhase = ''
-            gradle shadowJar
-          '';
+          builder = ./nix-builder.sh; # gradle shadowJar (with internet access)
 
           installPhase = ''
             mkdir -p $out
             cp build/libs/*-all.jar $out/
           '';
+
         };
       }
     );
