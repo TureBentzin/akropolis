@@ -8,6 +8,8 @@ self = stdenv.mkDerivation (finalAttrs: {
   pname = "akropolis";
   version = "1.8.1"; # see gradle.properties
 
+    src = ./.;
+
   nativeBuildInputs = [
     gradle
   ];
